@@ -1,0 +1,18 @@
+version: "3.2"
+
+services:
+    dqm4hep:
+        build: .
+        image: ncastello/dqm4hep
+
+    devcode:
+        image: ncastello/dqm4hep
+        environment:
+            - DISPLAY=unix${DISPLAY}
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            #- type: bind
+            #  source:/home/ncastello/repos/ddama
+            #  target:/damic/ddama
+                 
+
