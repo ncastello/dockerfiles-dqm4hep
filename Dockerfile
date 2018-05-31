@@ -51,13 +51,14 @@ RUN cd /damic && git clone -b release-1.4.4 https://github.com/DQM4HEP/dqm4hep.g
     && cd dqm4hep && mkdir build && cd build \
     # ONlye valid for release-1.4.4.
     && cmake .. -DBUILD_DQMVIZ=ON -DBUILD_DQM4ILC=OFF -DBUILD_EXAMPLES=OFF -DINSTALL_DOCS=OFF -DDIM_GUI=OFF -DFORCE_DIMJC_INSTALL=ON\
-    && make -j4 && make install
+    && make -j4 \
+    && chown -R damicuser:damicuser /damic
 
 USER damicuser
 
 ENV HOME /home/damicuser
 ENV PATH="${PATH}:/damic/dqm4hep/bin"
-ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH*}:/damic/dqm4hep/lib"
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/damic/dqm4hep/lib"
 ENV DIM_DNS_NODE="localhost"
 #ENV DQM4HEP_PLUGIN_DLL="/damic/ddama/lib/libddama.so"
 
