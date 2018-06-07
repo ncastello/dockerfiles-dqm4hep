@@ -33,8 +33,8 @@ RUN apt-get update && apt-get -y install \
     vim \
     # XXX --> TO Be deleted with new version dqm4hep
     liblog4cxx-dev \
-    libaprutil1-dev \ 
-    # subversion \ 
+    libaprutil1-dev \
+    # subversion \
     # XXX --> TO Be deleted with new version dqm4hep
     #tk \
     #ipython \
@@ -59,8 +59,9 @@ USER damicuser
 ENV HOME /home/damicuser
 ENV PATH="${PATH}:/damic/dqm4hep/bin"
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/damic/dqm4hep/lib"
-ENV DIM_DNS_NODE="localhost"
-#ENV DQM4HEP_PLUGIN_DLL="/damic/ddama/lib/libddama.so"
+ENV DIM_DNS_NODE="172.16.1.1"
+ENV DIM_HOST_NODE="172.16.1.1"
+ENV DQM4HEP_PLUGIN_DLL="/damic/ddama/lib/libddama.so"
 
 ENTRYPOINT ["/bin/bash"]
 

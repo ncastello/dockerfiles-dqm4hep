@@ -3,16 +3,65 @@ version: "3.2"
 services:
     dqm4hep:
         build: .
-        image: ncastello/dqm4hep
+        image: ncastello/dqm4hep:release-1.4.4
 
-    devcode:
-        image: ncastello/dqm4hep
+    dns:
+        image: ncastello/dqm4hep:release-1.4.4
+        networks:
+            static_network:
+                ipv4_address: 172.16.1.1
+        entrypoint:
+            - dns
+    dimjc:
+        image: ncastello/dqm4hep:release-1.4.4
+        user: root
+        networks:
+            static_network:
+                ipv4_address: 172.16.1.2
+        depends_on:
+            - "dns"
+        entrypoint:
+            - /damic/dqm4hep/bin/dimjc_daemon
+
+    me_collector:
+        image: ncastello/dqm4hep:release-1.4.4
         environment:
             - DISPLAY=unix${DISPLAY}
         volumes:
             - /tmp/.X11-unix:/tmp/.X11-unix
-            #- type: bind
-            #  source:/home/ncastello/repos/ddama
-            #  target:/damic/ddama
-                 
+            - type: bind
+              source: /home/ncastello/repos/ddama
+              target: /damic/ddama
+        networks:
+            static_network:
+                ipv4_address: 172.16.1.3
+        depends_on:
+            - "dns"
+            - "dimjc"
+        entrypoint:
+            - dqm4hep_start_monitor_element_collector
+            - -c
+            - damic_me_collector
+
+    dqm_gui:
+        image: ncastello/dqm4hep:release-1.4.4
+        environment:
+            - DISPLAY=unix${DISPLAY}
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        networks:
+            static_network:
+                ipv4_address: 172.16.1.4
+        depends_on:
+            - "dns"
+            - "dimjc"
+            - "me_collector"
+        entrypoint:
+            - dqm4hep_start_dqm_monitor_gui
+
+networks:
+    static_network:
+        ipam:
+            config:
+                - subnet: 172.16.0.0/16
 
